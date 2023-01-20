@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="RegularBlack">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/adamina</item>
+    </style>
+
+    <style name="InputText">
+        <item name="android:textColor">@color/black</item>
+        <item name="fontFamily">@font/adamina</item>
+        <item name="android:textSize">@dimen/hint_text_size</item>
+        <item name="android:paddingLeft">@dimen/hint_padding_left</item>
+    </style>
+
+    <style name="NewUser">
+        <item name="android:textColor">@color/button_blue</item>
+        <item name="fontFamily">@font/autour_one</item>
+        <item name="android:textSize">@dimen/new_user</item>
+    </style>
+
+    <style name="BlueButton">
+        <item name="android:background">@color/button_blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/autour_one</item>
+        <item name="android:textSize">@dimen/new_user</item>
+
+    </style>
+
+</resources>
