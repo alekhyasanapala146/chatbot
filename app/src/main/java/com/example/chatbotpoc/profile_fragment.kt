@@ -1,10 +1,17 @@
 package com.example.chatbotpoc
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.example.chatbotpoc.data.viewmodel.UserVM
+import com.example.chatbotpoc.databinding.FragmentProfileFragmentBinding
+import com.example.chatbotpoc.db.AppDb
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +28,10 @@ class profile_fragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val noteDatabase by lazy { AppDb.getDatabase(requireContext()).userDao() }
+    private var _binding: FragmentProfileFragmentBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,20 +44,48 @@ class profile_fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
+        val profileVM = ViewModelProvider(this)[UserVM::class.java]
+        _binding = FragmentProfileFragmentBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        //profileVM.userData(noteDatabase)
+
+       /* profileVM.userData.observe(requireActivity(), Observer { user->
+            binding.nameTv.text = getString(R.string.hello)+" "+ user[0].mobileNumber
+        })*/
+
+
         return inflater.inflate(R.layout.fragment_profile_fragment, container, false)
+
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        activity.let {
+            val viewModel = ViewModelProvider(it!!)[UserVM::class.java]
+            viewModel.geData(noteDatabase)
+            viewModel.mobileNumber.observe(viewLifecycleOwner, Observer { mobileNum->
+                binding.nameTv.text = getString(R.string.hello)+" "+mobileNum
+                Log.d("Number is ",mobileNum)
+
+            })
+            /*viewModel.userData.observe(viewLifecycleOwner, Observer { user->
+                binding.nameTv.text = "kkbk"
+                Log.d("first value ", user[0].mobileNumber)
+            })*/
+
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment profile_fragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+       // val noteDatabase by lazy { AppDb.getDatabase(requireContext()).userDao() }
+
+       /* // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             profile_fragment().apply {
@@ -54,6 +93,6 @@ class profile_fragment : Fragment() {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
-            }
+            }*/
     }
 }

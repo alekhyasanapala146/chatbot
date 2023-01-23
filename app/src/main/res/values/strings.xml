@@ -20,6 +20,10 @@
     <string name="input1">Enter mobile number</string>
     <string name="password">Enter password</string>
     <string name="new_user">New User</string>
+    <string name="hello">Hello</string>
+    <string name="welcome">Welcome to ChatBot</string>
+    <string name="help_text">I am here to help you please click button to proceed</string>
+
 
 
 

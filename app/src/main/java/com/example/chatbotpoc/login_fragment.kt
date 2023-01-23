@@ -5,16 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.chatbotpoc.data.viewmodel.LoginVM
 import com.example.chatbotpoc.databinding.FragmentLoginFragmentBinding
+import com.example.chatbotpoc.db.AppDb
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,9 +25,7 @@ private const val ARG_PARAM2 = "param2"
 class login_fragment : Fragment() {
 
     private var _binding:FragmentLoginFragmentBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private val noteDatabase by lazy { AppDb.getDatabase(requireContext()).userDao() }
     private val binding get() = _binding!!
 
     private var param1: String? = null
@@ -58,8 +52,8 @@ class login_fragment : Fragment() {
         //val view: View = inflater.inflate(R.layout.fragment_login_fragment, container, false)
         _binding!!.submit.setOnClickListener {
 
-            loginVM.mobileNumber.value = binding.mobileNumber.text?.trim().toString()
-            loginVM.password.value = binding.password.text?.trim().toString()
+            loginVM.mobileNumber = binding.mobileNumber.text?.trim().toString()
+            loginVM.password = binding.password.text?.trim().toString()
             var valid : Boolean = true
 
             if (!loginVM.isMobileNumberValid()){
@@ -70,6 +64,7 @@ class login_fragment : Fragment() {
             }
 
             if (valid){
+                loginVM.insertData(noteDatabase)
                 val action = login_fragmentDirections.actionLoginFragmentToProfileFragment2()
                 findNavController().navigate(action)
             }
