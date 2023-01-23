@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.chatbotpoc.data.viewmodel.UserVM
 import com.example.chatbotpoc.databinding.FragmentProfileFragmentBinding
 import com.example.chatbotpoc.db.AppDb
@@ -55,6 +57,11 @@ class profile_fragment : Fragment() {
             binding.nameTv.text = getString(R.string.hello)+" "+ user[0].mobileNumber
         })*/
 
+        binding.chatButton.setOnClickListener {
+            val action = profile_fragmentDirections.actionProfileFragmentToChatBotFragment()
+            findNavController().navigate(action)
+        }
+
 
         return inflater.inflate(R.layout.fragment_profile_fragment, container, false)
 
@@ -64,6 +71,11 @@ class profile_fragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+
+        /*binding.chatButton.setOnClickListener {
+            Toast.makeText(requireActivity(),"Please enter valid message ", Toast.LENGTH_SHORT).show()
+        }*/
 
         activity.let {
             val viewModel = ViewModelProvider(it!!)[UserVM::class.java]

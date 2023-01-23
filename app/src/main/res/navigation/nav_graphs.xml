@@ -14,7 +14,12 @@
         android:id="@+id/profile_fragment"
         android:name="com.example.chatbotpoc.profile_fragment"
         android:label="fragment_profile_fragment"
-        tools:layout="@layout/fragment_profile_fragment" />
+        tools:layout="@layout/fragment_profile_fragment" >
+        <action
+            android:id="@+id/action_profile_fragment_to_chat_bot_fragment"
+            app:destination="@id/chat_bot_fragment"
+            app:popUpTo="@id/profile_fragment" />
+    </fragment>
     <fragment
         android:id="@+id/login_fragment"
         android:name="com.example.chatbotpoc.login_fragment"
@@ -24,4 +29,9 @@
             android:id="@+id/action_login_fragment_to_profile_fragment2"
             app:destination="@id/profile_fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chat_bot_fragment"
+        android:name="com.example.chatbotpoc.chat_bot_fragment"
+        android:label="fragment_chat_bot_fragment"
+        tools:layout="@layout/fragment_chat_bot_fragment" />
 </navigation>
