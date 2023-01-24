@@ -13,6 +13,10 @@ import com.example.chatbotpoc.data.model.MessageModal
 import com.example.chatbotpoc.data.model.MsgModal
 import com.example.chatbotpoc.data.viewmodel.ChatBotVM
 import com.example.chatbotpoc.databinding.FragmentChatBotFragmentBinding
+import com.example.chatbotpoc.retrofit.APIEndPoint
+import com.example.chatbotpoc.retrofit.RetrofitHelper
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -77,7 +81,8 @@ class chat_bot_fragment : Fragment() {
                 viewModel.messagesList.add(MessageModal(viewModel.userMsg,"user"))
                 val adapter = MessageRVAdapter(viewModel.messagesList,requireActivity())
                 binding.idRVChats.adapter = adapter
-                getResponse(viewModel.userMsg)
+               // getResponse(viewModel.userMsg)
+                getBotResponse(viewModel.userMsg)
             }
             else{
                 Toast.makeText(requireActivity(),"Please enter valid message ",Toast.LENGTH_SHORT).show()
@@ -91,7 +96,18 @@ class chat_bot_fragment : Fragment() {
 
     }
 
-    private fun getResponse(userMsg: String) {
+    private fun getBotResponse(userMsg: String) {
+        val quotesApi = RetrofitHelper.getInstance().create(APIEndPoint::class.java)
+        val url = "http://api.brainshop.ai/get?bid=172027&key=znVdhqRj7BhpQji0&uid=[uid]&msg=$userMsg"
+        GlobalScope.launch {
+            val result = quotesApi.getMessages(url)
+            result?.cnt
+            viewModel.messagesList.add(MessageModal(result?.cnt,"bot"))
+            viewModel._messagesList.postValue(viewModel.messagesList)
+        }
+    }
+
+   /* private fun getResponse(userMsg: String) {
 
         val url =
             "http://api.brainshop.ai/get?bid=172027&key=znVdhqRj7BhpQji0&uid=[uid]&msg=$userMsg"
@@ -99,6 +115,7 @@ class chat_bot_fragment : Fragment() {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
         val retrofitAPI: APIEndPoint = retrofit.create(APIEndPoint::class.java)
         val call: Call<MsgModal?>? = retrofitAPI.getMessages(url)
@@ -114,7 +131,7 @@ class chat_bot_fragment : Fragment() {
                 Toast.makeText(requireActivity(),t.toString(),Toast.LENGTH_SHORT).show()
             }
         })
-    }
+    }*/
 
     companion object {
 
