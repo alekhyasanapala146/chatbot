@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.chatbotpoc.data.viewmodel.LoginVM
 import com.example.chatbotpoc.data.viewmodel.UserVM
 import com.example.chatbotpoc.databinding.FragmentProfileFragmentBinding
 import com.example.chatbotpoc.db.AppDb
@@ -33,6 +35,7 @@ class profile_fragment : Fragment() {
     private val noteDatabase by lazy { AppDb.getDatabase(requireContext()).userDao() }
     private var _binding: FragmentProfileFragmentBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: UserVM by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +68,7 @@ class profile_fragment : Fragment() {
         }*/
 
         activity.let {
-            val viewModel = ViewModelProvider(it!!)[UserVM::class.java]
+           // val viewModel = ViewModelProvider(it!!)[UserVM::class.java]
             viewModel.geData(noteDatabase)
             viewModel.mobileNumber.observe(viewLifecycleOwner, Observer { mobileNum->
                 binding.nameTv.text = getString(R.string.hello)+" "+mobileNum

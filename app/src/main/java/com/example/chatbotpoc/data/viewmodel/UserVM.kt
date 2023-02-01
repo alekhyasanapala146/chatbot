@@ -4,11 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.chatbotpoc.data.model.User
 import com.example.chatbotpoc.data.repository.UserDao
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import javax.inject.Inject
 
-class UserVM :ViewModel() {
+@HiltViewModel
+class UserVM  @Inject constructor():ViewModel() {
 
     var userData= MutableLiveData<List<User>>()
     lateinit var userDataList: ArrayList<User>

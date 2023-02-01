@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.chatbotpoc.data.model.User
 import com.example.chatbotpoc.data.repository.UserDao
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginVM: ViewModel() {
+@HiltViewModel
+class LoginVM @Inject constructor(): ViewModel() {
 
     lateinit var mobileNumber: String
     lateinit var password: String

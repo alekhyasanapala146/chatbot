@@ -14,4 +14,7 @@ object RetrofitHelper {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
+
+    val apiService: APIEndPoint = getInstance().create(APIEndPoint::class.java)
+
 }

@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.chatbotpoc.data.viewmodel.ChatBotVM
 import com.example.chatbotpoc.data.viewmodel.LoginVM
 import com.example.chatbotpoc.databinding.FragmentLoginFragmentBinding
 import com.example.chatbotpoc.db.AppDb
@@ -31,6 +33,8 @@ class login_fragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val loginVM: LoginVM by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -45,7 +49,7 @@ class login_fragment : Fragment() {
     ): View? {
 
 
-        val loginVM = ViewModelProvider(this).get(LoginVM::class.java)
+        //val loginVM = ViewModelProvider(this).get(LoginVM::class.java)
 
         _binding = FragmentLoginFragmentBinding.inflate(inflater, container, false)
         val root: View = binding.root
