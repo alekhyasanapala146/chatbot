@@ -61,25 +61,14 @@ class profile_fragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-
-        /*binding.chatButton.setOnClickListener {
-            Toast.makeText(requireActivity(),"Please enter valid message ", Toast.LENGTH_SHORT).show()
-        }*/
-
         activity.let {
-           // val viewModel = ViewModelProvider(it!!)[UserVM::class.java]
+           val viewModel = ViewModelProvider(it!!)[UserVM::class.java]
             viewModel.geData(noteDatabase)
             viewModel.mobileNumber.observe(viewLifecycleOwner, Observer { mobileNum->
                 binding.nameTv.text = getString(R.string.hello)+" "+mobileNum
                 Log.d("Number is ",mobileNum)
 
             })
-            /*viewModel.userData.observe(viewLifecycleOwner, Observer { user->
-                binding.nameTv.text = "kkbk"
-                Log.d("first value ", user[0].mobileNumber)
-            })*/
-
         }
     }
 
