@@ -52,11 +52,20 @@ class login_fragment : Fragment() {
         //val view: View = inflater.inflate(R.layout.fragment_login_fragment, container, false)
         _binding!!.submit.setOnClickListener {
 
-            loginVM.mobileNumber = binding.mobileNumber.text?.trim().toString()
+            loginVM.mobileNumber = getMobileNumber(binding.mobileNumber.text?.trim().toString())
             loginVM.password = binding.password.text?.trim().toString()
             var valid : Boolean = true
 
-            if (!loginVM.isMobileNumberValid()){
+            if (loginVM.validUserInput(loginVM.mobileNumber,loginVM.password)){
+                loginVM.insertData(noteDatabase)
+                val action = login_fragmentDirections.actionLoginFragmentToProfileFragment2()
+                findNavController().navigate(action)
+            }
+            else{
+                Toast.makeText(activity,"Enter valid data", Toast.LENGTH_SHORT).show()
+            }
+
+          /*  if (!loginVM.isMobileNumberValid()){
                 valid = false
             }
             else if (!loginVM.isPasswordValid()){
@@ -70,23 +79,47 @@ class login_fragment : Fragment() {
             }
             else{
                 Toast.makeText(activity,"Enter valid data", Toast.LENGTH_SHORT).show()
-            }
+            }*/
 
         }
 
         return root
     }
 
-   /* override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    fun getMobileNumber(number: String): String {
+        return number
+    }
 
-        val navController = Navigation.findNavController(view)
-        val navigateButton: Button = view.findViewById(R.id.navigate_button)
+    fun sum(number: Int,number2 : Int): Int {
+        return number+number2
+    }
 
-        navigateButton.setOnClickListener {
-            navController.navigate(R.id.action_login_fragment_to_profile_fragment2)
+
+    fun validUserInput(
+        mobileNumber : String,
+        password : String
+    ) : Boolean {
+        // write conditions along with their return statement
+        // if username / password / confirm password are empty return false
+        if (mobileNumber.isEmpty() || password.isEmpty()){
+            return false
         }
-    }*/
+        // if digit count of the password is less than 2 return false
+        if (password.count { it.isDigit() } < 2){
+            return false
+        }
+        return true
+    }
+    /* override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+         super.onViewCreated(view, savedInstanceState)
+
+         val navController = Navigation.findNavController(view)
+         val navigateButton: Button = view.findViewById(R.id.navigate_button)
+
+         navigateButton.setOnClickListener {
+             navController.navigate(R.id.action_login_fragment_to_profile_fragment2)
+         }
+     }*/
 
     companion object {
         /**

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graphs"
-    app:startDestination="@id/chat_bot_fragment">
+    app:startDestination="@id/login_fragment">
 
     <fragment
         android:id="@+id/fragment_1"
@@ -17,8 +17,7 @@
         tools:layout="@layout/fragment_profile_fragment" >
         <action
             android:id="@+id/action_profile_fragment_to_chat_bot_fragment"
-            app:destination="@id/chat_bot_fragment"
-            app:popUpTo="@id/profile_fragment" />
+            app:destination="@id/chat_bot_fragment" />
     </fragment>
     <fragment
         android:id="@+id/login_fragment"

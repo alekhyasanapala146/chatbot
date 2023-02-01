@@ -21,6 +21,22 @@ class LoginVM: ViewModel() {
         return password.isNotEmpty()
     }
 
+    fun validUserInput(
+        mobileNumber : String,
+        password : String
+    ) : Boolean {
+        // write conditions along with their return statement
+        // if username / password / are empty and mobile num length !=10 return false
+        var valid:Boolean = true
+        if (mobileNumber.isEmpty() || mobileNumber.length<10){
+            valid= false
+        }
+        if (password.isEmpty()){
+            valid= false
+        }
+        return valid
+    }
+
     fun insertData(db: UserDao) {
         val thread = Thread {
             db.deleteAllUsers()

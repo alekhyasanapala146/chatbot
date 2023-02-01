@@ -46,26 +46,13 @@ class profile_fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        val profileVM = ViewModelProvider(this)[UserVM::class.java]
         _binding = FragmentProfileFragmentBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        //profileVM.userData(noteDatabase)
-
-       /* profileVM.userData.observe(requireActivity(), Observer { user->
-            binding.nameTv.text = getString(R.string.hello)+" "+ user[0].mobileNumber
-        })*/
-
-        binding.chatButton.setOnClickListener {
+        _binding!!.chatButton.setOnClickListener {
             val action = profile_fragmentDirections.actionProfileFragmentToChatBotFragment()
             findNavController().navigate(action)
         }
-
-
-        return inflater.inflate(R.layout.fragment_profile_fragment, container, false)
-
-
+        return root
     }
 
     @SuppressLint("SetTextI18n")
