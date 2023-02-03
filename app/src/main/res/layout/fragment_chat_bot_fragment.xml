@@ -6,25 +6,38 @@
     <data>
 
         <variable
-            name="LoginViewModel"
-            type="com.example.chatbotpoc.data.viewmodel.LoginVM" />
+            name="chatViewModel"
+            type="com.example.chatbotpoc.data.viewmodel.ChatBotVM" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/logoutButton"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logout5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.appcompat.widget.AppCompatImageButton>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/idRVChats"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="50dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/logoutButton"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/idRVChats">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/idEdtMessage"
@@ -36,6 +49,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 style="@style/InputText"
+                android:layout_marginTop="20dp"
                 />
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/sendButton"
@@ -51,14 +65,14 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-       <!-- <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Login"
-            style="@style/BlueButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />-->
+        <!-- <androidx.appcompat.widget.AppCompatButton
+             android:id="@+id/submit"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="@string/Login"
+             style="@style/BlueButton"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,9 +7,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.chatbotpoc.data.model.ChatData
 import com.example.chatbotpoc.data.model.MessageModal
 
-class MessageRVAdapter(private val data: ArrayList<MessageModal>, private  val requireActivity: FragmentActivity) : RecyclerView.Adapter<MessageRVAdapter.ViewHolder>() {
+class MessageRVAdapter(
+    private val data: ArrayList<MessageModal>,
+    private val requireActivity: FragmentActivity,
+    private val chatDataList: ArrayList<ChatData>
+) : RecyclerView.Adapter<MessageRVAdapter.ViewHolder>() {
 
 
     class ViewHolder (ItemView: View) : RecyclerView.ViewHolder(ItemView) {

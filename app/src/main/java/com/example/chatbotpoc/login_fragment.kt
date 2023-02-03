@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -48,19 +49,15 @@ class login_fragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-
-        //val loginVM = ViewModelProvider(this).get(LoginVM::class.java)
-
         _binding = FragmentLoginFragmentBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        //val view: View = inflater.inflate(R.layout.fragment_login_fragment, container, false)
         _binding!!.submit.setOnClickListener {
 
             loginVM.mobileNumber = getMobileNumber(binding.mobileNumber.text?.trim().toString())
             loginVM.password = binding.password.text?.trim().toString()
-            var valid : Boolean = true
 
             if (loginVM.validUserInput(loginVM.mobileNumber,loginVM.password)){
+                setLogin()
                 loginVM.insertData(noteDatabase)
                 val action = login_fragmentDirections.actionLoginFragmentToProfileFragment2()
                 findNavController().navigate(action)
@@ -68,26 +65,16 @@ class login_fragment : Fragment() {
             else{
                 Toast.makeText(activity,"Enter valid data", Toast.LENGTH_SHORT).show()
             }
-
-          /*  if (!loginVM.isMobileNumberValid()){
-                valid = false
-            }
-            else if (!loginVM.isPasswordValid()){
-                valid = false
-            }
-
-            if (valid){
-                loginVM.insertData(noteDatabase)
-                val action = login_fragmentDirections.actionLoginFragmentToProfileFragment2()
-                findNavController().navigate(action)
-            }
-            else{
-                Toast.makeText(activity,"Enter valid data", Toast.LENGTH_SHORT).show()
-            }*/
-
         }
 
         return root
+    }
+
+    private fun setLogin() {
+        val sharedPreferences = activity?.getSharedPreferences("MySharedPref", AppCompatActivity.MODE_PRIVATE)
+        val myEdit = sharedPreferences?.edit()
+        myEdit?.putBoolean("login",true)
+        myEdit?.commit()
     }
 
     fun getMobileNumber(number: String): String {

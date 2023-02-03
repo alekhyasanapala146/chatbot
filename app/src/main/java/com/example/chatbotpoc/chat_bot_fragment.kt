@@ -5,28 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatbotpoc.data.model.MessageModal
-import com.example.chatbotpoc.data.model.MsgModal
-import com.example.chatbotpoc.data.repository.DataRepository
 import com.example.chatbotpoc.data.repository.DataRepositoryImpl
 import com.example.chatbotpoc.data.viewmodel.ChatBotVM
 import com.example.chatbotpoc.databinding.FragmentChatBotFragmentBinding
-import com.example.chatbotpoc.retrofit.APIEndPoint
+import com.example.chatbotpoc.db.AppDb
 import com.example.chatbotpoc.retrofit.RetrofitHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,8 +37,9 @@ class chat_bot_fragment : Fragment() {
 
     private var _binding: FragmentChatBotFragmentBinding? = null
     private val binding get() = _binding!!
-     //lateinit var viewModel : ChatBotVM
     val viewModel:ChatBotVM by viewModels()
+    private val chatDB by lazy { AppDb.getDatabase(requireContext()).chatDao() }
+
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -68,7 +62,7 @@ class chat_bot_fragment : Fragment() {
 
         var data = ArrayList<MessageModal>()
         binding.idRVChats.layoutManager = LinearLayoutManager(requireActivity())
-        val adapter = MessageRVAdapter(data,requireActivity())
+        val adapter = MessageRVAdapter(data, requireActivity(), viewModel.chatDataList)
         binding.idRVChats.adapter = adapter
 
         binding.idRVChats
@@ -78,8 +72,6 @@ class chat_bot_fragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        //viewModel = ViewModelProvider(this)[ChatBotVM::class.java]
-
         binding.sendButton.setOnClickListener {
             viewModel.userMsg = binding.idEdtMessage.text.toString()
 
@@ -87,8 +79,17 @@ class chat_bot_fragment : Fragment() {
 
                 binding.idEdtMessage.setText("")
                 viewModel.messagesList.add(MessageModal(viewModel.userMsg,"user"))
-                val adapter = MessageRVAdapter(viewModel.messagesList,requireActivity())
+                val adapter = MessageRVAdapter(
+                    viewModel.messagesList,
+                    requireActivity(),
+                    viewModel.chatDataList
+                )
                 binding.idRVChats.adapter = adapter
+                binding.idRVChats.scrollToPosition(viewModel.messagesList.size-1)
+                viewModel.insertChatData(chatDB,
+                    viewModel.userMsg,
+                    "user",
+                )
                // getResponse(viewModel.userMsg)
                 getBotResponse(viewModel.userMsg)
             }
@@ -98,24 +99,77 @@ class chat_bot_fragment : Fragment() {
         }
 
         viewModel._messagesList.observe(viewLifecycleOwner, Observer { list->
-            val adapter = MessageRVAdapter(viewModel.messagesList,requireActivity())
+            val adapter = MessageRVAdapter(
+                viewModel.messagesList,
+                requireActivity(),
+                viewModel.chatDataList
+            )
             binding.idRVChats.adapter = adapter
+            binding.idRVChats.scrollToPosition(viewModel.messagesList.size-1)
         })
+
+        viewModel._chatList.observe(viewLifecycleOwner) { list ->
+            val adapter = MessageRVAdapter(
+                viewModel.messagesList,
+                requireActivity(),
+                viewModel.chatDataList
+            )
+            binding.idRVChats.adapter = adapter
+            binding.idRVChats.scrollToPosition(viewModel.messagesList.size-1)
+        }
+
+        binding.logoutButton.setOnClickListener {
+            clearChatData()
+            setLoginFalse()
+            val action = chat_bot_fragmentDirections.actionChatBotFragmentToLoginFragment()
+            findNavController().navigate(action)
+        }
+
+    }
+
+    private fun clearChatData() {
+        viewModel.deleteChatData(chatDB)
+    }
+
+    private fun setLoginFalse() {
+        val sharedPreferences = activity?.getSharedPreferences("MySharedPref", AppCompatActivity.MODE_PRIVATE)
+        val myEdit = sharedPreferences?.edit()
+        myEdit?.putBoolean("login",false)
+        myEdit?.commit()
+    }
+
+    override fun onResume() {
+        getChatData()
+        super.onResume()
+    }
+
+    private fun getChatData() {
+        viewModel.getChatData(chatDB)
+        val adapter = MessageRVAdapter(viewModel.messagesList,requireActivity(),viewModel.chatDataList)
+        binding.idRVChats.adapter = adapter
+        binding.idRVChats.scrollToPosition(viewModel.messagesList.size-1)
 
     }
 
     private fun getBotResponse(userMsg: String) {
-       // val quotesApi = RetrofitHelper.getInstance().create(APIEndPoint::class.java)
         url = "http://api.brainshop.ai/get?bid=172027&key=znVdhqRj7BhpQji0&uid=[uid]&msg=$userMsg"
         GlobalScope.launch {
-           /* val result = quotesApi.getMessages(url)
-            result?.cnt*/
             val res = DataRepositoryImpl(RetrofitHelper.apiService).getMessage(url)
             res?.cnt
 
             viewModel.messagesList.add(MessageModal(res?.cnt,"bot"))
             viewModel._messagesList.postValue(viewModel.messagesList)
+
+            viewModel.insertChatData(chatDB,
+                res?.cnt,
+                "bot"
+            )
         }
+    }
+
+    fun onBackPressed() {
+        val action = chat_bot_fragmentDirections.actionChatBotFragmentToProfileFragment()
+        findNavController().navigate(action)
     }
 
    /* private fun getResponse(userMsg: String) {

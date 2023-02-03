@@ -23,6 +23,7 @@
     <string name="welcome">Welcome to ChatBot</string>
     <string name="help_text">I am here to help you please click button to proceed</string>
     <string name="click_here">Click here</string>
+    <string name="splash">Welcome to chatbot</string>
 
 
 </resources>

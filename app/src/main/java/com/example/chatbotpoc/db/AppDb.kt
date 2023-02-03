@@ -4,14 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.chatbotpoc.data.model.ChatData
+import com.example.chatbotpoc.data.model.MessageModal
 import com.example.chatbotpoc.data.model.User
+import com.example.chatbotpoc.data.repository.ChatDataDao
 import com.example.chatbotpoc.data.repository.UserDao
 
 
-@Database(entities = [(User::class)],version = 1)
+@Database(entities = [(User::class),(ChatData::class)],version = 1)
 abstract class AppDb :RoomDatabase()  {
 
     abstract fun userDao() : UserDao
+    abstract fun chatDao(): ChatDataDao
 
     companion object {
 

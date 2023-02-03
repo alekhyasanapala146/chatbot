@@ -3,16 +3,16 @@ package com.example.chatbotpoc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.chatbotpoc.data.viewmodel.LoginVM
 import com.example.chatbotpoc.data.viewmodel.UserVM
 import com.example.chatbotpoc.databinding.FragmentProfileFragmentBinding
 import com.example.chatbotpoc.db.AppDb
@@ -69,6 +69,20 @@ class profile_fragment : Fragment() {
                 Log.d("Number is ",mobileNum)
 
             })
+        }
+
+    }
+
+    fun onBackPressed() {
+        //handle back press event
+    }
+
+    override fun onResume() {
+        super.onResume()
+        this.requireView().isFocusableInTouchMode = true
+        this.requireView().requestFocus()
+        this.requireView().setOnKeyListener { _, keyCode, _ ->
+            keyCode == KeyEvent.KEYCODE_BACK
         }
     }
 
